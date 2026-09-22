@@ -2,50 +2,82 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    private array $categories = [
-        ['id' => 1, 'nama_kategori' => 'Fiksi', 'deskripsi' => 'Buku cerita rekaan seperti novel dan kumpulan cerpen.'],
-        ['id' => 2, 'nama_kategori' => 'Teknologi', 'deskripsi' => 'Buku seputar teknologi, pemrograman, dan ilmu komputer.'],
-        ['id' => 3, 'nama_kategori' => 'Sejarah', 'deskripsi' => 'Buku bertema sejarah dan biografi tokoh.'],
-    ];
-
-    public function index()
+    /**
+     * Menampilkan daftar kategori dengan paginasi.
+     */
+    public function index(): View
     {
-        $categories = $this->categories;
+        $categories = Category::paginate(10);
 
         return view('categories.index', compact('categories'));
     }
 
-    public function create()
+    /**
+     * Menampilkan form untuk membuat kategori baru.
+     */
+    public function create(): View
     {
         return view('categories.create');
     }
 
-    public function store(StoreCategoryRequest $request)
+    /**
+     * Menyimpan data kategori baru ke database.
+     */
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
+        Category::create($validated);
+
         return redirect()->route('categories.index')
-            ->with('success', "Kategori \"{$validated['nama_kategori']}\" berhasil ditambahkan (data dummy, belum tersimpan ke database).");
+            ->with('success', "Kategori \"{$validated['nama_kategori']}\" berhasil ditambahkan.");
     }
 
-    public function edit(string $id)
+    /**
+     * Menampilkan form untuk mengedit kategori.
+     */
+    public function edit(string $id): View
     {
-        return "CategoryController@edit, id: {$id}";
+        $category = Category::findOrFail($id);
+
+        return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, string $id)
+    /**
+     * Memperbarui data kategori di database.
+     */
+    public function update(Request $request, string $id): RedirectResponse
     {
-        return "CategoryController@update, id: {$id}";
+        $category = Category::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|max:100',
+            'deskripsi'     => 'nullable|string',
+        ]);
+
+        $category->update($validated);
+
+        return redirect()->route('categories.index')
+            ->with('success', "Kategori \"{$validated['nama_kategori']}\" berhasil diperbarui.");
     }
 
-    public function destroy(string $id)
+    /**
+     * Menghapus data kategori dari database.
+     */
+    public function destroy(string $id): RedirectResponse
     {
-        return "CategoryController@destroy, id: {$id}";
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }
-
-
