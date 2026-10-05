@@ -1,24 +1,21 @@
+{{-- File: resources/views/members/index.blade.php --}}
 @extends('layouts.app')
 
+@section('title', 'Daftar Anggota')
+
 @section('content')
-<div class="container">
-    <h2>Daftar Anggota</h2>
-    <a href="{{ route('members.create') }}" class="btn btn-primary mb-3">Tambah Anggota</a>
+    <h1>Daftar Anggota</h1>
 
-    <!-- Form Search -->
-    <form action="{{ route('members.index') }}" method="GET" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Cari nama anggota..." value="{{ request('search') }}">
-            <button class="btn btn-outline-secondary" type="submit">Cari</button>
-        </div>
-    </form>
+    <p><a href="{{ route('members.create') }}" class="btn">+ Tambah Anggota</a></p>
 
-    <table class="table table-bordered">
+    <table>
         <thead>
             <tr>
-                <th>NIM</th>
+                <th>ID</th>
                 <th>Nama</th>
+                <th>NIM</th>
                 <th>Email</th>
+                <th>No. Telepon</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>
@@ -26,31 +23,31 @@
         <tbody>
             @forelse ($members as $member)
                 <tr>
-                    <td>{{ $member->nim }}</td>
-                    <td>{{ $member->nama }}</td>
-                    <td>{{ $member->email }}</td>
-                    <td>{{ ucfirst($member->status) }}</td>
+                    <td>{{ $member['id'] }}</td>
+                    <td>{{ $member['nama'] }}</td>
+                    <td>{{ $member['nim'] }}</td>
+                    <td>{{ $member['email'] }}</td>
+                    <td>{{ $member['nomor_telepon'] }}</td>
+                    <td>{{ ucfirst($member['status']) }}</td>
                     <td>
-                        <a href="{{ route('members.show', $member->id) }}" class="btn btn-sm btn-info">Lihat</a>
-                        <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-warning">Ubah</a>
-                        <form action="{{ route('members.destroy', $member->id) }}" method="POST" style="display:inline-block;">
+                        <a href="{{ route('members.show', $member['id']) }}">Detail</a>
+                        |
+                        <a href="{{ route('members.edit', $member['id']) }}">Edit</a>
+                        |
+                        <form class="inline" action="{{ route('members.destroy', $member['id']) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Hapus anggota ini?')">Hapus</button>
+                            <button type="submit">Hapus</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">Data tidak ditemukan.</td>
+                    <td colspan="7">Belum ada data anggota.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
-    <!-- Pagination links dengan parameter search -->
-    <div class="d-flex justify-content-center">
-        {{ $members->appends(request()->query())->links() }}
-    </div>
-</div>
+    {{ $members->links() }}
 @endsection

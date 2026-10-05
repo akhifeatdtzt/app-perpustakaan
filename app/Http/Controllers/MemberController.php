@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Member;
 use App\Http\Requests\StoreMemberRequest;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $members = Member::when($request->query('search'), function ($query, $search) {
-            $query->where('nama', 'like', "%{$search}%");
-        })->paginate(10);
+        $members = Member::paginate(10);
 
         return view('members.index', compact('members'));
     }
@@ -24,20 +22,18 @@ class MemberController extends Controller
 
     public function store(StoreMemberRequest $request)
     {
-        Member::create($request->validated());
+        $validated = $request->validated();
 
-        return redirect()->route('members.index')->with('success', 'Anggota berhasil ditambahkan.');
-    }
+        Member::create($validated);
 
-    public function show(string $id)
-    {
-        $member = Member::findOrFail($id);
-        return view('members.show', compact('member'));
+        return redirect()->route('members.index')
+            ->with('success', "Anggota \"{$validated['nama']}\" berhasil ditambahkan.");
     }
 
     public function edit(string $id)
     {
         $member = Member::findOrFail($id);
+
         return view('members.edit', compact('member'));
     }
 
@@ -46,17 +42,18 @@ class MemberController extends Controller
         $member = Member::findOrFail($id);
 
         $validated = $request->validate([
-            'nama'          => ['required', 'string', 'max:255'],
-            'nim'           => ['required', 'string', 'unique:members,nim,' . $member->id],
-            'email'         => ['required', 'email', 'unique:members,email,' . $member->id],
-            'nomor_telepon' => ['required', 'string', 'max:20'],
-            'alamat'        => ['required', 'string'],
-            'status'        => ['required', 'in:aktif,nonaktif'],
+            'nama' => 'required|string|max:100',
+            'nim' => 'required|string|max:20|unique:members,nim,' . $member->id,
+            'email' => 'required|email|max:100|unique:members,email,' . $member->id,
+            'nomor_telepon' => 'required|string|max:15',
+            'alamat' => 'required|string',
+            'status' => 'required|in:aktif,nonaktif',
         ]);
 
         $member->update($validated);
 
-        return redirect()->route('members.index')->with('success', 'Data anggota berhasil diperbarui.');
+        return redirect()->route('members.index')
+            ->with('success', "Anggota \"{$validated['nama']}\" berhasil diperbarui.");
     }
 
     public function destroy(string $id)
@@ -64,6 +61,7 @@ class MemberController extends Controller
         $member = Member::findOrFail($id);
         $member->delete();
 
-        return redirect()->route('members.index')->with('success', 'Anggota berhasil dihapus.');
+        return redirect()->route('members.index')
+            ->with('success', 'Anggota berhasil dihapus.');
     }
 }

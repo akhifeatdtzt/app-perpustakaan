@@ -9,11 +9,20 @@ use App\Http\Requests\StoreBookRequest;
 
 class BookController extends Controller
 {
+    
+    
     public function index()
     {
-        $books = Book::paginate(10);
+        $books = Book::with('category')->paginate(10);
 
         return view('books.index', compact('books'));
+    }
+
+    public function show(string $id)
+    {
+        $book = Book::with('category')->findOrFail($id);
+
+        return view('books.show', compact('book'));
     }
 
     public function create()
@@ -33,17 +42,12 @@ class BookController extends Controller
             ->with('success', "Buku \"{$validated['judul']}\" berhasil ditambahkan.");
     }
 
-    public function show(string $id)
-    {
-        $book = Book::findOrFail($id);
-
-        return view('books.show', compact('book'));
-    }
 
     public function edit(string $id)
     {
         $book = Book::findOrFail($id);
-        $categories = Category::all();
+
+        return view('books.show', compact('book'));
 
         return view('books.edit', compact('book', 'categories'));
     }
@@ -76,4 +80,6 @@ class BookController extends Controller
         return redirect()->route('books.index')
             ->with('success', 'Buku berhasil dihapus.');
     }
+
+    
 }
