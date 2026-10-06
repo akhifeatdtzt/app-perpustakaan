@@ -34,6 +34,8 @@
             <div class="error">{{ $message }}</div>
         @enderror
 
+        <p><em>Petugas pencatat: {{ auth()->user()->name }} (otomatis dari akun yang login).</em></p>
+
         <label for="user_id">Petugas</label>
         <select name="user_id" id="user_id">
             <option value="">-- Pilih Petugas --</option>
