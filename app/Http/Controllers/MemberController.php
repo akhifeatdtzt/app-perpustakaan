@@ -64,4 +64,10 @@ class MemberController extends Controller
         return redirect()->route('members.index')
             ->with('success', 'Anggota berhasil dihapus.');
     }
+    public function show(string $id)
+    {
+        $member = Member::with(['loans.loanItems.book', 'loans.user'])->findOrFail($id);
+
+        return view('members.show', compact('member'));
+    }
 }
