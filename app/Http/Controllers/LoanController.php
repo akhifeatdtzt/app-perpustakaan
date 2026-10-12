@@ -88,4 +88,19 @@ class LoanController extends Controller
         return redirect()->route('loans.index')
             ->with('success', 'Transaksi peminjaman berhasil dihapus.');
     }
+
+    public function kembalikan($id)
+    {
+        // Cari data transaksi peminjaman berdasarkan ID
+        $loan = Loan::findOrFail($id);
+
+        // Update status dan tanggal_dikembalikan
+        $loan->update([
+            'status' => 'dikembalikan',
+            'tanggal_dikembalikan' => now()->toDateString(),
+        ]);
+
+        // Redirect kembali ke /loans dengan flash message sukses
+        return redirect()->route('loans.index')->with('success', 'Buku berhasil dikembalikan!');
+    }
 }

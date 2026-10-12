@@ -9,6 +9,37 @@
         table { border-collapse: collapse; width: 100%; margin-top: 16px; }
         th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
         .info th { width: 160px; background: #f3f4f6; }
+
+        /* Class CSS Badge Status Transaksi */
+        .badge-status {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: capitalize;
+        }
+
+        /* Hijau untuk dikembalikan */
+        .badge-dikembalikan {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Kuning / Oranye untuk dipinjam */
+        .badge-dipinjam {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        /* Merah untuk terlambat */
+        .badge-terlambat {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
@@ -38,7 +69,12 @@
         </tr>
         <tr>
             <th>Status</th>
-            <td>{{ ucfirst($loan['status']) }}</td>
+            {{-- BAGIAN BADGE STATUS BERWARNA --}}
+            <td>
+                <span class="badge-status badge-{{ $loan['status'] }}">
+                    {{ ucfirst($loan['status']) }}
+                </span>
+            </td>
         </tr>
     </table>
 

@@ -8,6 +8,13 @@
 
     <p><a href="{{ route('loans.create') }}" class="btn">+ Tambah Peminjaman</a></p>
 
+    {{-- Alert Flash Message Sukses --}}
+    @if (session('success'))
+        <div class="alert alert-success mb-3">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <table>
         <thead>
             <tr>
@@ -34,7 +41,14 @@
                     </td>
                     <td>{{ $loan['tanggal_pinjam'] }}</td>
                     <td>{{ $loan['tanggal_kembali'] }}</td>
-                    <td>{{ ucfirst($loan['status']) }}</td>
+                    
+                    {{-- 1. BAGIAN BADGE STATUS BERWARNA --}}
+                    <td>
+                        <span class="badge-status badge-{{ $loan['status'] }}">
+                            {{ ucfirst($loan['status']) }}
+                        </span>
+                    </td>
+                    
                     <td>
                         <a href="{{ route('loans.show', $loan['id']) }}">Detail</a>
                         |
@@ -43,8 +57,18 @@
                         <form class="inline" action="{{ route('loans.destroy', $loan['id']) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Hapus</button>
+                            <button type="submit" onclick="return confirm('Hapus peminjaman ini?')">Hapus</button>
                         </form>
+
+                        {{-- 2. BAGIAN TOMBOL KEMBALIKAN (HANYA MUNCUL JIKA STATUS 'dipinjam') --}}
+                        @if ($loan['status'] === 'dipinjam')
+                            |
+                            <form class="inline" action="{{ route('loans.kembalikan', $loan['id']) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" onclick="return confirm('Apakah buku ini sudah dikembalikan?')">Kembalikan</button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @empty
