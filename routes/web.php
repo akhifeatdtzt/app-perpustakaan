@@ -6,6 +6,15 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\ProfileController;
+
+Route::middleware(['auth'])->group(function () {
+    // Route Tampilan Profil Petugas
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    
+    // Route Proses Update Password
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
 
 
 // Route untuk proses pengembalian buku (metode PATCH atau POST)
