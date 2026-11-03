@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\LoanController;
+use App\Http\Controllers\Api\BookController;
+use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\LoanController;
 use App\Http\Controllers\ProfileController;
 
 Route::middleware(['auth'])->group(function () {
