@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Perpustakaan Digital Kampus')</title>
     <style>
+
         * { box-sizing: border-box; }
         body { font-family: sans-serif; margin: 0; color: #1f2937; }
         nav { background: #1e3a8a; padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
@@ -55,6 +56,17 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        .stats-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .stat-card { flex: 1; min-width: 160px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; text-align: center; }
+        .stat-card .value { font-size: 32px; font-weight: bold; color: #1e3a8a; }
+        .stat-card .label { margin-top: 6px; color: #6b7280; font-size: 14px; }
+
+        .pagination { margin-top: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .pagination a { color: #2563eb; text-decoration: none; }
+        .pagination a:hover { text-decoration: underline; }
+        .pagination .pagination-current { font-weight: bold; color: #1e3a8a; }
+        .pagination .pagination-disabled { color: #9ca3af; }
 
 
     </style>

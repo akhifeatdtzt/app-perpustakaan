@@ -1,0 +1,17 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Book;
+use Illuminate\Database\Seeder;
+
+class BookSeeder extends Seeder
+{
+    /**
+     * Seed data buku menggunakan BookFactory.
+     */
+    public function run(): void
+    {
+        Book::factory()->count(20)->create();
+    }
+}

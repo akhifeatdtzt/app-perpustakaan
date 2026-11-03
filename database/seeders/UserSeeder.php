@@ -9,33 +9,35 @@ use App\Models\User;
 
 class UserSeeder extends Seeder
 {
-    
+    /**
+     * Seed data user (admin & petugas).
+     */
     public function run(): void
     {
         User::updateOrCreate(
             ['email' => 'admin@pens.ac.id'],
             [
-                'name' => 'Admin Perpustakaan',
+                'name'     => 'Bambang Sutrisno',
                 'password' => Hash::make('password'),
-                'role' => 'admin',
+                'role'     => 'admin',
             ]
         );
 
         User::updateOrCreate(
             ['email' => 'petugas1@pens.ac.id'],
             [
-                'name' => 'Petugas Satu',
+                'name'     => 'Siti Rahmawati',
                 'password' => Hash::make('password'),
-                'role' => 'petugas',
+                'role'     => 'petugas',
             ]
         );
 
         User::updateOrCreate(
             ['email' => 'petugas2@pens.ac.id'],
             [
-                'name' => 'Petugas Dua',
+                'name'     => 'Ahmad Fauzi',
                 'password' => Hash::make('password'),
-                'role' => 'petugas',
+                'role'     => 'petugas',
             ]
         );
     }

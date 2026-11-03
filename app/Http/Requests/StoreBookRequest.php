@@ -25,7 +25,7 @@ class StoreBookRequest extends FormRequest
             'isbn' => 'nullable|string|max:20',
             'stok' => 'required|integer|min:0',
             'category_id' => 'required|integer|exists:categories,id',
-            'category_id' => 'required|integer',
+            //'category_id' => 'required|integer',
         ];
     }
 
